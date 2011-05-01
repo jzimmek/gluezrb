@@ -1,0 +1,7 @@
+= Gluez
+
+Gluez is a system configuration toolkit. You describe the system state as a list of tasks. These will be translated in a single big bash script. Running the script executes the relevant tasks as bash command and takes your system into the desired state.
+
+== Copyright
+
+Copyright (c) 2009 Jan Zimmek. See LICENSE for details.
