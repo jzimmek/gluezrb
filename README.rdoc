@@ -11,13 +11,13 @@ Gluez is a system configuration toolkit. You describe the system state as a list
     gem install gluez
   
 * Describe your system
-    cat >~/example.rb <<\EOF
-    #!/usr/bin/env ruby
-    require 'gluez'
-    puts Gluez::run [
-      [:package, 'nginx']
-    ]
-    EOF
+  cat >~/example.rb <<\EOF
+  #!/usr/bin/env ruby
+  require 'gluez'
+  puts Gluez::run [
+    [:package, 'nginx']
+  ]
+  EOF
 
 * Make it executable
     
