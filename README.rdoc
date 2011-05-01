@@ -12,7 +12,7 @@ Gluez is a system configuration toolkit. You describe the system state as a list
   
 * Describe your system
 
-    =begin
+=begin rdoc
 cat >~/example.rb <<\EOF
 #!/usr/bin/env ruby
 require 'gluez'
@@ -20,8 +20,8 @@ puts Gluez::run [
   [:package, 'nginx']
 ]
 EOF
-    =end
-  
+=end
+
 * Make it executable
     
     chmod +x ~/example.rb
