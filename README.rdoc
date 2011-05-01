@@ -5,9 +5,13 @@ Gluez is a system configuration toolkit. You describe the system state as a list
 == Getting started
 
 * Install ruby on your local pc
+
 * Install the gluez gem
+
   gem install gluez
+  
 * Describe your system
+
   cat >~/example.rb <<EOF
   #!/usr/bin/env ruby
   require 'gluez'
@@ -15,8 +19,10 @@ Gluez is a system configuration toolkit. You describe the system state as a list
     [:package, 'nginx']
   ]
   EOF
+  
 * Make it executable
   chmod +x ~/example.rb
+  
 * Execute it
   ~/example.rb
 
