@@ -1,0 +1,33 @@
+h1. Gluez
+
+Gluez is a system configuration toolkit. You describe the system state as a list of tasks. These will be translated in a single big bash script. Running the script executes the relevant tasks as bash command and takes your system into the desired state.
+
+h2. Getting started
+
+* Install ruby 1.9 on your local pc
+
+* Install the gluez gem
+
+bc. gem install gluez
+  
+* Describe your system
+
+bc. cat >~/example.rb <<\EOF
+#!/usr/bin/env ruby
+require 'gluez'
+puts Gluez::run [
+  [:package, 'nginx']
+]
+EOF
+
+* Make it executable
+    
+bc. chmod +x ~/example.rb
+  
+* Execute it
+  
+bc. ~/example.rb
+
+h2. Copyright
+
+Copyright (c) 2009 Jan Zimmek. See LICENSE for details.
