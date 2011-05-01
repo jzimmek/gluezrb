@@ -47,6 +47,20 @@ function package_nginx {
 }
 package_nginx
 
+h2. Simulate Execution
+
+bc. cat >~/example.rb <<\EOF
+#!/usr/bin/env ruby
+require 'gluez'
+puts Gluez::run [
+  [:package, 'nginx']
+], :simulate => true
+EOF
+
+h2. Remote Execution over SSH
+
+bc. ~/example.rb | ssh root@yourhost
+
 h2. Copyright
 
 Copyright (c) 2009 Jan Zimmek. See LICENSE for details.
