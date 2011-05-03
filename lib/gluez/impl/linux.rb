@@ -54,7 +54,9 @@ module Gluez
             }
 
           when :transfer
-            raw = File.read(cfg[:file_dir] + "/files/" + opts[:source])
+            default_file = name.split("/").last.gsub(/^\./, "") + ".erb"
+            
+            raw = File.read(cfg[:file_dir] + "/files/" + opts[:source, default_file])
             
             content = Gluez::Erb::Engine.parse(raw, opts[:vars, {}])
 
@@ -82,7 +84,8 @@ CMD
 
             steps << {
               :check  => "\"$(echo -n $data | base64 -i -d | md5sum - | awk '{print $1}')\" = \"$(md5sum #{name} | awk '{print $1}')\"",
-              :code   => "echo -n ${data} | base64 -i -d > #{name}"
+              :code   => "echo -n ${data} | base64 -i -d > #{name}",
+              :diff   => "echo -n ${data} | base64 -i -d | diff --rcs --from-file #{name} --to-file -"
             }
 
           when :group
