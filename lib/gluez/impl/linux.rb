@@ -53,6 +53,25 @@ module Gluez
               :code   => "apt-get install #{name} --yes"
             }
 
+          when :crontab
+            default_file = "crontab.#{name}.erb"
+            
+            raw = File.read(cfg[:file_dir] + "/files/" + opts[:source, default_file])
+            
+            content = Gluez::Erb::Engine.parse(raw, opts[:vars, {}])
+
+            setup = <<-CMD
+data=$(cat <<\\DATA
+#{content.strip}
+DATA
+)
+CMD
+
+            steps << {
+              :check  => "\"$(echo -n $data | base64 -i -d | md5sum - | awk '{print $1}')\" = \"$(crontab -u #{name} -l | md5sum - | awk '{print $1}')\"",
+              :code   => "echo -n $data | base64 -i -d | crontab -u #{name} -"
+            }
+            
           when :transfer
             default_file = name.split("/").last.gsub(/^\./, "") + ".erb"
             
@@ -84,8 +103,7 @@ CMD
 
             steps << {
               :check  => "\"$(echo -n $data | base64 -i -d | md5sum - | awk '{print $1}')\" = \"$(md5sum #{name} | awk '{print $1}')\"",
-              :code   => "echo -n ${data} | base64 -i -d > #{name}",
-              :diff   => "echo -n ${data} | base64 -i -d | diff --rcs --from-file #{name} --to-file -"
+              :code   => "echo -n ${data} | base64 -i -d > #{name}"
             }
 
           when :group
