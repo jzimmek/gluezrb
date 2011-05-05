@@ -3,7 +3,11 @@ module Gluez
     def initialize(options)
       @options = options
     end
-
+    
+    def key?(key)
+      @options.key?(key)
+    end
+    
     def [](name, default=nil)
       value = @options[name]
       if value
