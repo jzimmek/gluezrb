@@ -152,6 +152,23 @@ CMD
               :check  => opts[:not_if],
               :code   => "su -l #{opts[:user, 'root']} -c '#{opts[:code]}'"
             }
+          
+          when :umount
+            steps << {
+              :check  => "$(mount | grep \"on #{name} type\" | wc -l) -eq 0",
+              :code   => "umount #{name}"
+            }
+            
+          when :mount
+            
+            cmd = "mount -t #{opts[:type]}"
+            cmd = "#{cmd} -o #{opts[:options]}" if opts.key?(:options)
+            cmd = "#{cmd} #{opts[:device]} #{name}"
+            
+            steps << {
+              :check  => "$(mount | grep \"on #{name} type\" | wc -l) -eq 1",
+              :code   => cmd
+            }
 
           when :link
             steps << {
