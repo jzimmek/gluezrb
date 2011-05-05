@@ -186,7 +186,7 @@ CMD
             }
 
             steps << {
-              :check  => "-f #{opts[:binary]}",
+              :check  => opts[:test],
               :code   => <<-CODE
                 [ -f #{home_dir}/tmp/#{opts[:filename]} ] && rm #{home_dir}/tmp/#{opts[:filename]}
                 [ -d #{home_dir}/tmp/#{opts[:folder]} ] && rm -rf #{home_dir}/tmp/#{opts[:folder]}
