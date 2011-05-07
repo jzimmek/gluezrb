@@ -152,6 +152,12 @@ CMD
               :check  => opts[:not_if],
               :code   => "su -l #{opts[:user, 'root']} -c '#{opts[:code]}'"
             }
+
+          when :bundler
+            steps << {
+              :check    => "\"$(su -l #{opts[:user]} -c 'cd #{name} && bundle check > /dev/null' && echo 'up2date')\" = \"up2date\"",
+              :code     => "su -l #{opts[:user]} -c \"cd #{name} && bundle install\""
+            }
           
           when :umount
             steps << {
