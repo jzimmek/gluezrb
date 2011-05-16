@@ -152,6 +152,13 @@ CMD
               :check  => opts[:not_if],
               :code   => "su -l #{opts[:user, 'root']} -c '#{opts[:code]}'"
             }
+            
+          when :bash_once
+            home_dir = (opts[:user, 'root'] == 'root') ? "/root" : "/home/#{opts[:user, 'root']}"
+            steps << {
+              :check  => "-f #{home_dir}/.gluez/#{name}",
+              :code   => "su -l #{opts[:user, 'root']} -c '#{opts[:code]}\ntouch #{home_dir}/.gluez/#{name}'"
+            }
 
           when :bundler
             steps << {
