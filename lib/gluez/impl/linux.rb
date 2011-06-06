@@ -51,16 +51,24 @@ module Gluez
             
             content = Gluez::Erb::Engine.parse(raw, opts[:vars, {}])
 
+#             setup = <<-CMD
+# data=$(cat <<\\DATA
+# #{content.strip}
+# DATA
+# )
+# CMD
+
             setup = <<-CMD
-data=$(cat <<\\DATA
+su -l #{opts[:user, 'root']} -c "cat >~/.gluez_transfer <<\\DATA
 #{content.strip}
 DATA
-)
+"
 CMD
 
+
             steps << {
-              :check  => %Q("\\$(echo -n $data | base64 -i -d | md5sum - | awk '{print $1}')" = "\\$(crontab -u #{name} -l | md5sum - | awk '{print $1}')"),
-              :code   => "echo -n $data | base64 -i -d | crontab -u #{name} -"
+              :check  => %Q("\\$(cat ~/.gluez_transfer | base64 -i -d - | md5sum - | awk '{print \\$1}')" = "\\$(crontab -u #{name} -l | md5sum - | awk '{print \\$1}')"),
+              :code   => "cat ~/.gluez_transfer | base64 -i -d - | crontab -u #{name} -"
             }
             
           when :transfer
