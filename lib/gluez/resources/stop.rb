@@ -1,0 +1,10 @@
+resource :stop do
+  ready!
+  
+  setup = "service --status-all 1>/tmp/gluez.tmp 2>&1"
+  steps do |step|
+    step.checks << %Q("\\$(grep #{self.name} /tmp/gluez.tmp | wc -l)" = "1")
+    step.checks << %Q("\\$(service #{self.name} status | grep -E 'is running|start/running' | wc -l)" = "0")
+    step.code = "service #{self.name} stop"
+  end
+end
