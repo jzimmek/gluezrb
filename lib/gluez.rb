@@ -5,6 +5,9 @@ class Object
   def recipe(&block)
     $gluez.instance_eval(&block)
   end
+  def user(&block)
+    $gluez.instance_eval(&block)
+  end
   def resource(name, &block)
     Gluez::Context.register(name.to_s.underscore, &block)
   end

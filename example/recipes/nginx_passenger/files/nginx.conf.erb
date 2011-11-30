@@ -1,0 +1,44 @@
+user <%= user %>;
+worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    passenger_root <%= home_dir %>/.gem/ruby/1.9.1/gems/passenger-<%= passenger_version %>;
+    passenger_ruby <%= home_dir %>/ruby/bin/ruby;
+
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+   server {
+     listen        <%= port %>;
+     server_name   <%= domain %>;
+
+     root <%= app_root %>;
+
+     <% ['stylesheets', 'images', 'javascripts'].each do |it| %>
+     location /<%= user %>/<%= it %> {
+       rewrite /<%= user %>/<%= it %>/(.*) /<%= it %>/$1 last;
+     }
+     <% end %>
+
+     location /nginx_status {
+       stub_status on;
+       access_log   off;
+       allow 127.0.0.1;
+       deny all;
+     }
+     
+     location / {
+       passenger_enabled on;
+       rails_env <%= rails_env %>;
+     }
+     
+   }
+
+}

@@ -1,4 +1,4 @@
-resource :user do
+resource :create_user do
   mandatory   :uid
   mandatory   :gid
 

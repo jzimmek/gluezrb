@@ -35,16 +35,30 @@ module Gluez
       @name = name
       @steps = []
       
+      @as_user = nil
+      
       @notifies = []
       @subscriptions = []
       
       @mandatories = []
       @optionals = []
       
-      self.optional :user, :default => "root"
+      # self.optional :user, :default => "root"
       self.optional :lazy, :default => false
       
       self.accessor :setup
+    end
+    
+    def as_user(user)
+      @as_user = user
+    end
+    
+    def user
+      @as_user || @context.user
+    end
+    
+    def home_dir
+      self.user == "root" ? "/root" : "/home/#{self.user}"
     end
     
     def validate!

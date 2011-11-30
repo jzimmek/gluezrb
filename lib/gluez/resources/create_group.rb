@@ -1,4 +1,4 @@
-resource :group do
+resource :create_group do
   mandatory :gid
   
   ready!
