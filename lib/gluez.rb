@@ -27,6 +27,24 @@ class String
     word
   end
   
+  def multiline_strip
+    lines = self.split("\n")
+    first = lines[0]
+    
+    idx = 0
+    while first[idx] == ' '
+      idx += 1
+    end
+    
+    if idx > 0
+      lines = lines.map do |line|
+        line[idx, line.length]
+      end
+    end
+    
+    lines.join("\n")
+  end
+  
   # Return the string as camelcased version e.g. some_text_value becomes SomeTextValue.
   def camelize(first_letter_in_uppercase=true)
     word = self.dup
