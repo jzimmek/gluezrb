@@ -141,7 +141,7 @@ module Gluez
             gid user_ctx.get(:uid)
           end
           
-          ['.gluez', '.gluez/path', 'tmp', 'backup', 'bin', '.ssh'].each do |dir_name|
+          ['.gluez', '.gluez/path', 'tmp', 'backup', 'bin', '.ssh', 'log'].each do |dir_name|
             dir(dir_name) do
               as_user user_ctx.user
             end
