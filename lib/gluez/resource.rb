@@ -26,6 +26,7 @@ module Gluez
     
     # A chunk of code which will be executed before any other code defined as steps
     attr_accessor :setup
+    attr_accessor :clean
     
     attr_reader :subscriptions
     
@@ -47,6 +48,7 @@ module Gluez
       self.optional :lazy, :default => false
       
       self.accessor :setup
+      self.accessor :clean
     end
     
     def as_user(user)
@@ -139,6 +141,11 @@ module Gluez
         generate_steps_checks(g, @steps)
         generate_success_or_failure(g, "echo \"[up2date] - #{fun}\"") do
           g << "echo \"[not up2date] - #{fun}\""
+
+          if self.clean
+            g << "echo \"[clean] - #{fun}\""
+            g << "su -l #{user} -c \"#{self.clean}\""
+          end
 
           unless simulate
             y = @steps.length

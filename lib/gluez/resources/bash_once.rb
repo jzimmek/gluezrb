@@ -1,5 +1,6 @@
 resource :bash_once do
   mandatory :code
+  optional  :clean
   
   ready!
   

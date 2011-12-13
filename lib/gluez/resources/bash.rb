@@ -1,6 +1,7 @@
 resource :bash do
   mandatory :code
   mandatory :not_if
+  optional  :clean
   
   ready!
 
