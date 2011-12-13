@@ -79,7 +79,7 @@ resource :initd do
   script64 = Base64.encode64(script.multiline_strip)
 
   setup "cat >~/.gluez_transfer <<\\DATA
-#{script64}
+#{script64.strip}
 DATA"
   
   steps do |step|
