@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'gluez'
-  s.version = '0.4.2'
+  s.version = '0.4.3'
   s.summary = "a system configuration toolkit"
   s.description = %{a server configuration toolkit}
   s.files = Dir['lib/**/**'] + Dir['bin/**/**']

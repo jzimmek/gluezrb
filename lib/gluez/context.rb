@@ -10,10 +10,11 @@ module Gluez
     # A reference to the outer context
     attr_reader :parent, :included_user_contexts
     
-    def initialize(parent=nil, name=nil, user=nil, &block)
+    def initialize(parent=nil, name=nil, user=nil, type=nil, &block)
       @parent = parent
       @name = name
       @user = user
+      @type = type
       
       @resources = []
       @properties = {}
@@ -65,7 +66,14 @@ module Gluez
     end
     
     def locate(resource)
-      File.dirname($0) + (@name.nil? ? "" : "/recipes/#{@name}") + "/files/#{resource}"
+      case @type
+        when :recipe
+          File.dirname($0) + "/recipes/#{@name}/files/#{resource}"
+        when :user
+          File.dirname($0) + "/users/files/#{resource}"
+        else
+          File.dirname($0) + "/files/#{resource}"
+      end
     end
     
     def read(resource)
@@ -84,7 +92,7 @@ module Gluez
     
     def include_library_recipe(library_dir, name, &block)
       raise "include_recipe is only allowed in user context" if self == self.root
-      Gluez::Context.new(self, name, nil) do |c|
+      Gluez::Context.new(self, name, nil, :recipe) do |c|
         c.instance_eval(&block) if block
         load "#{library_dir}/recipes/#{name}/#{name}.rb"
       end
@@ -101,7 +109,7 @@ module Gluez
       
     def include_user(name, failsafe=false, &block)
       raise "include_user is only allowed in root context" unless self == self.root
-      Gluez::Context.new(self, name, name) do |c|
+      Gluez::Context.new(self, name, name, :user) do |c|
         if block
           c.instance_eval(&block) 
         end
