@@ -13,6 +13,10 @@ class Object
   def resource(name, &block)
     Gluez::Context.register(name.to_s.underscore, &block)
   end
+  def role?(name)
+    roles = ($roles || [])
+    roles.include?(name.to_s) || roles.include?(name.to_sym)
+  end
 end
 
 module Gluez
