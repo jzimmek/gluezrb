@@ -1,6 +1,8 @@
 resource :stop do
   ready!
   
+  self.as_user "root"
+  
   setup = "service --status-all 1>/tmp/gluez.tmp 2>&1"
   steps do |step|
     step.checks << %Q("\\$(grep #{self.name} /tmp/gluez.tmp | wc -l)" = "1")

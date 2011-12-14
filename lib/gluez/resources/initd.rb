@@ -2,6 +2,7 @@ require 'base64'
 
 resource :initd do
   optional    :daemon_opts, :default => ""
+  optional    :path, :default => "/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
   mandatory   :daemon
   
   ready!
@@ -21,9 +22,9 @@ resource :initd do
     # Description:       starts #{self.name}
     ### END INIT INFO
 
-    PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+    PATH=#{self.path}
     DAEMON=#{self.daemon}
-    DAEMON_OPTS=#{self.daemon_opts}
+    DAEMON_OPTS="#{self.daemon_opts}"
     NAME=#{self.name}
     DESC=$NAME
 
@@ -41,26 +42,26 @@ resource :initd do
     case "$1" in
       start)
         echo -n "Starting $DESC: "
-        start-stop-daemon --start --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS || true
+        start-stop-daemon --start --chuid #{self.user} --quiet --pidfile /var/run/$NAME.pid --exec su -l #{self.user} -c '$DAEMON' -- $DAEMON_OPTS || true
         echo "$NAME."
         ;;
 
       stop)
         echo -n "Stopping $DESC: "
-        start-stop-daemon --stop --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON || true
+        start-stop-daemon --stop --chuid #{self.user} --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON || true
         echo "$NAME."
         ;;
 
       restart|force-reload)
         echo -n "Restarting $DESC: "
-        start-stop-daemon --stop --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON || true
+        start-stop-daemon --stop --chuid #{self.user} --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON || true
         sleep 1
-        start-stop-daemon --start --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS || true
+        start-stop-daemon --start --chuid #{self.user} --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS || true
         echo "$NAME."
         ;;    
       reload)
         echo -n "Reloading $DESC configuration: "
-        start-stop-daemon --stop --signal HUP --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON || true
+        start-stop-daemon --stop --chuid #{self.user} --signal HUP --quiet --pidfile /var/run/$NAME.pid --exec $DAEMON || true
         echo "$NAME."
         ;;
 
