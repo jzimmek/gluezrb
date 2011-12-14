@@ -3,8 +3,8 @@ require 'base64'
 resource :upstart do
   optional    :start_on,  :default => "runlevel [2]"
   optional    :stop_on,   :default => "runlevel [016]"
-  optional    :fork,      :default => false
-  mandatory   :code
+
+  mandatory   :script
   
   ready!
   
@@ -18,10 +18,11 @@ resource :upstart do
 
     console owner
 
-    #{self.fork ? 'expect fork' : ''}
     respawn
 
-    exec #{self.code}
+    script
+      #{self.script}
+    end script
   EOF
   
   script64 = Base64.encode64(script.multiline_strip)
